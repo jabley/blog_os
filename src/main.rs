@@ -2,6 +2,7 @@
 #![no_main] // disable all Rust-level entry points
 #![feature(custom_test_frameworks)] // replace the default test runner
 #![test_runner(crate::test_runner)] // with the test_runner function below
+#![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
 
@@ -13,6 +14,9 @@ pub extern "C" fn _start() -> ! {
     // this function is the entry point, since the linker looks for a function
     // named `_start` by default
     println!("Hello World{}", "!");
+
+    #[cfg(test)]
+    test_main();
 
     loop {}
 }
