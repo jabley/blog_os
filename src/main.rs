@@ -1,5 +1,7 @@
 #![no_std] // Don't link the Rust standard library
 #![no_main] // disable all Rust-level entry points
+#![feature(custom_test_frameworks)] // replace the default test runner
+#![test_runner(crate::test_runner)] // with the test_runner function below
 
 use core::panic::PanicInfo;
 
@@ -20,4 +22,12 @@ pub extern "C" fn _start() -> ! {
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
     loop {}
+}
+
+#[cfg(test)]
+fn test_runner(tests: &[&dyn Fn()]) {
+    println!("Running {} tests", tests.len());
+    for test in tests {
+        test();
+    }
 }
