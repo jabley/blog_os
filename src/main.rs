@@ -12,9 +12,7 @@ pub extern "C" fn _start() -> ! {
     // named `_start` by default
     println!("Hello World{}", "!");
 
-    panic!("Some panic message");
-
-    // loop {}
+    loop {}
 }
 
 /// This function is called on panic.
