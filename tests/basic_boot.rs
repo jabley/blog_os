@@ -17,3 +17,10 @@ pub extern "C" fn _start() -> ! {
 fn panic(info: &PanicInfo) -> ! {
     blog_os::test_panic_handler(info)
 }
+
+use blog_os::println;
+
+#[test_case]
+fn test_println() {
+    println!("test_println output");
+}
