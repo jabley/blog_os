@@ -34,3 +34,7 @@ test-timeout = 30 # The timeout for running a test through `bootimage test` or `
 [[test]]
 name = "should_panic"
 harness = false
+
+[[test]]
+name = "stack_overflow"
+harness = false
