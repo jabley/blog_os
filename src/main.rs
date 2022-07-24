@@ -7,6 +7,7 @@
 use blog_os::println;
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
+use x86_64::structures::paging::PageTable;
 
 entry_point!(kernel_main);
 
@@ -24,6 +25,19 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     for (i, entry) in l4_table.iter().enumerate() {
         if !entry.is_unused() {
             println!("L4 Entry {}: {:?}", i, entry);
+
+            // get the physical address from the entry and convert it
+            let phys = entry.frame().unwrap().start_address();
+            let virt = phys.as_u64() + boot_info.physical_memory_offset;
+            let ptr = VirtAddr::new(virt).as_mut_ptr();
+            let l3_table: &PageTable = unsafe { &*ptr };
+
+            // print non-empty entries of the level 3 table
+            for (i, entry) in l3_table.iter().enumerate() {
+                if !entry.is_unused() {
+                    println!("  L3 Entry {}: {:?}", i, entry);
+                }
+            }
         }
     }
 
